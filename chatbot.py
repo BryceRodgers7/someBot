@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
@@ -35,7 +35,7 @@ prompt = ChatPromptTemplate.from_messages([
 chain = prompt | llm | StrOutputParser()
 
 # Define the graph nodes
-def process_query(state: Dict) -> Dict:
+def process_query(state: Dict[str, Any]) -> Dict[str, Any]:
     """Process the user query and generate a response."""
     query = state["query"]
     response = chain.invoke({
@@ -44,7 +44,7 @@ def process_query(state: Dict) -> Dict:
     })
     return {"response": response}
 
-def should_escalate(state: Dict) -> Tuple[bool, Dict]:
+def should_escalate(state: Dict[str, Any]) -> Tuple[bool, Dict[str, Any]]:
     """Determine if the query should be escalated to a human agent."""
     # Check both user query and AI response for escalation terms
     user_escalation_terms = [
@@ -73,7 +73,7 @@ def should_escalate(state: Dict) -> Tuple[bool, Dict]:
     
     return False, state
 
-def escalate_to_human(state: Dict) -> Dict:
+def escalate_to_human(state: Dict[str, Any]) -> Dict[str, Any]:
     """Handle escalation to human agent."""
     state["response"] += "\n\nI've escalated your query to a human agent. They will contact you shortly."
     return state
