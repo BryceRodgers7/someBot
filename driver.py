@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 client = OpenAI(
-  api_key="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"
+  api_key="lookup"
 )
 
 completion = client.chat.completions.create(
