@@ -1,5 +1,9 @@
 import streamlit as st
-from chatbot import app, TRACTOR_KNOWLEDGE
+from chatbot_core import create_chatbot
+from knowledge_base import TRACTOR_KNOWLEDGE
+
+# Create the chatbot application
+app = create_chatbot()
 
 # Set page config
 st.set_page_config(
@@ -75,8 +79,13 @@ if prompt := st.chat_input("Type your message here..."):
     # Get bot response
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = app.invoke({"query": prompt})
-            st.markdown(response["response"])
-    
-    # Add bot response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response["response"]}) 
+            try:
+                result = app.invoke({"query": prompt})
+                response = result.get("response", "I apologize, but I couldn't process your request.")
+                st.markdown(response)
+                
+                # Add bot response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": response})
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
+                st.session_state.messages.append({"role": "assistant", "content": "I apologize, but I encountered an error. Please try again."}) 
