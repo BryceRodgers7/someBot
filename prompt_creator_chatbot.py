@@ -36,7 +36,7 @@ class PromptInstructions(BaseModel):
     requirements: List[str]
 
 # Use environment variable for API key
-llm = ChatOpenAI(model="gpt-3.5-turbo",temperature=0, api_key="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")
+llm = ChatOpenAI(model="gpt-3.5-turbo",temperature=0, api_key="lookup")
 llm_with_tool = llm.bind_tools([PromptInstructions])
 
 def info_chain(state):
